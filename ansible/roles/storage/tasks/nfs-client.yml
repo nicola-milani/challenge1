@@ -1,0 +1,16 @@
+---
+- name: Helm nfs-client-provisioner Chart
+  vars:
+    namespace: "nfs-client"
+    service: "nfs-client"
+    file: "stable/nfs-client-provisioner"
+    setYaml: |
+      nfs:
+        server: "{{ network }}.1"
+        path: "/var/nfs/share"
+      storageClass:
+        defaultClass: true
+  include_role:
+    name: addons
+    tasks_from: helm
+...

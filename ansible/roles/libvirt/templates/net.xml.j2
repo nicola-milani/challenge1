@@ -1,0 +1,17 @@
+<network>
+  <name>{{ domain.split(".")[0] }}</name>
+  <domain name="{{ domain }}"/>
+  <dns>
+    <forwarder addr="8.8.8.8"/>
+  </dns>
+  <forward mode='nat'>
+    <nat>
+      <port start='1' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='{{ domain.split(".")[0] }}' stp='on' delay='0'/>
+  <ip address='{{ network }}.1' netmask='{{ netmask }}'>
+    <dhcp>
+    </dhcp>
+  </ip>
+</network>

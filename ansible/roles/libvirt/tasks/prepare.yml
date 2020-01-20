@@ -1,0 +1,41 @@
+---
+- name: Obtain host information
+  setup:
+  vars:
+    warn: no
+  run_once: true
+
+- name: obtener info de la red
+  run_once: true
+  virt_net:
+    state: active
+    name: "{{ domain.split('.')[0] }}"
+  register: net_ok
+  ignore_errors: yes
+
+- include_tasks: create_net.yml
+  run_once: true
+  when: net_ok.failed == true
+
+- name: Active network
+  run_once: true
+  virt_net:
+    state: active
+    name: "{{ domain.split('.')[0] }}"
+
+- name: Creates directory
+  run_once: true
+  file:
+    path: "{{ ansible_env.HOME }}/.images"
+    state: directory
+
+- name: include download
+  include: "download_{{ linux_flavor }}.yml"
+  
+- name: Prepare_local_storage
+  when: storage is defined
+  run_once: true
+  include_role:
+    name: storage
+    tasks_from: "{{ storage }}.server"
+...

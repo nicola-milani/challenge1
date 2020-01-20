@@ -1,0 +1,112 @@
+---
+- name: Change file ownership, group and permissions
+  delegate_to: localhost
+  run_once: true
+  file:
+    path: "{{ ansible_ssh_private_key_file }}"
+    mode: '0600'
+
+- name: Wait for start to complete
+  wait_for_connection:
+    connect_timeout: 60
+    sleep: 5
+    delay: 20
+    timeout: 600
+  vars:
+    ansible_host: "{{ vm_ip }}"
+    warn: false
+
+- name: Obtain vm information
+  setup:
+  vars:
+    ansible_host: "{{ vm_ip }}"
+    warn: false
+
+- name: Hostname Configuration
+  command: hostnamectl set-hostname "{{ inventory_hostname }}"
+  vars:
+    ansible_host: "{{ vm_ip }}"
+
+- name: Make sure old host conf is not in the hosts configuration
+  lineinfile:
+    path: /etc/hosts
+    state: absent
+    regexp: '#Added by Ansible os role'
+  vars:
+    ansible_host: "{{ vm_ip }}"
+
+- name: Update /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    insertbefore: BOF
+    line: '{{ hostvars[item].ansible_default_ipv4.address }} {{ item }} {{ item }}.{{ domain }} #Added by Ansible os role'
+  with_items: "{{ groups.vms }}"
+  vars:
+    ansible_host: "{{ vm_ip }}"
+
+# - name: install requirements for apt
+#   apt:
+#     name: "{{ packages }}"
+#     update_cache: yes
+#     force_apt_get: True
+#   vars:
+#     packages:
+#     - python-apt
+#   when: ansible_os_family == "Debian"
+#   run_once: true
+
+# - name: Update repositories cache and full upgrade
+#   yum:
+#     upgrade: full
+#     force_apt_get: True
+#   when: ansible_os_family == "Debian"
+#   run_once: true
+  
+# - name: Disable unattended-upgrades
+#   shell: "dpkg -P unattended-upgrades"
+#   when: ansible_os_family == "Debian"
+#   vars:
+#     ansible_host: "{{ vm_ip }}"
+
+- name: Update repositories cache and install libvirt
+  yum:
+    name: "{{ packages }}"
+    state: latest
+  when: ansible_os_family == "RedHat"
+  vars:
+    packages:
+    - libvirt-daemon-kvm
+    - python-lxml
+    - psutils
+    - psmisc
+    - tmux
+  
+- name: Add repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version != "8"
+  vars:
+    ansible_host: "{{ vm_ip }}"
+  check_mode: yes
+
+- name: Add repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/Everything/$basearch
+    gpgkey: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+  when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+  vars:
+    ansible_host: "{{ vm_ip }}"
+
+- name: Install storage_dependencies
+  when: storage is defined
+  vars:
+    ansible_host: "{{ vm_ip }}"
+  include_role:
+    name: storage
+    tasks_from: "{{ storage }}.nodes"
+...

@@ -1,0 +1,114 @@
+---
+- sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_set: yes
+    state: present
+  run_once: true
+
+- name: Update repositories cache and install libvirt
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+    force_apt_get: True
+  vars:
+    packages:
+    - libvirt-daemon-system
+    - python-libvirt
+    - python-lxml
+  when: ansible_os_family == "Debian"
+  run_once: true
+
+- name: Update repositories cache and install libvirt
+  yum:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+    - libvirt-daemon-kvm
+    - python-lxml
+  when: ansible_os_family == "RedHat"
+  #run_once: true
+
+- name: enable and start libvirtd service
+  systemd:
+    name: libvirtd
+    daemon_reload: yes
+    enabled: yes
+    masked: no
+    state: started
+  run_once: true
+
+- name: Ansible check if vm image exists.
+  stat:
+    path: "/var/lib/libvirt/images/[inventory_hostname].qcow2"
+  register: vm_file_details
+
+- name: deploy image
+  copy:
+    src: /var/lib/libvirt/images/box.{{linux_flavor}}.img
+    dest: /var/lib/libvirt/images/{{ inventory_hostname }}.qcow2
+    group: "libvirt"
+    mode: '0666'
+#  when: vm_file_details.stat.exists == false
+  when: not "/var/lib/libvirt/images/[ inventory_hostname ].qcow2" is exists
+  notify: clean box
+
+- name: image chgrp
+  when: vm_file_details.stat.exists == false
+  file:
+   path: /var/lib/libvirt/images
+   group: "libvirt"
+
+- name: Check VM status
+  virt:
+    command: status
+    name: "{{ inventory_hostname }}"
+  register: vm_status
+  ignore_errors: yes
+
+- name: create_vm
+  when: vm_status.status is not defined
+  virt:
+    command: define
+    name: "{{ inventory_hostname }}"
+    uri: "{{ libvirt_uri }}"
+    xml: "{{ lookup('template', 'vm.xml.j2') }}"
+
+- name: getMAC
+  when: vm_status.status is not defined
+  shell: virsh domiflist --domain "{{ inventory_hostname }}" | grep "{{ domain.split('.')[0] }}" | awk '{print $5}'
+  register: mac
+
+- virt_net:
+    name: '{{ domain.split(".")[0] }}'
+    command: modify
+    xml: "<host mac='{{mac.stdout}}' name='{{ inventory_hostname }}.{{ domain }}' ip='{{ vm_ip }}'/>"
+  when: vm_status.status is not defined
+
+- name: Check that the VM is hibernate
+  when: vm_status.status is defined and vm_status.status == "shutdown"
+  stat:
+    path: /var/lib/libvirt/qemu/save/{{ inventory_hostname }}.save
+  register: vm_save_stat_result
+
+- name: restore vm
+  when: vm_save_stat_result.stat is defined and vm_save_stat_result.stat.exists == true
+  shell: virsh restore /var/lib/libvirt/qemu/save/{{ inventory_hostname }}.save --running
+  register: vm_restore
+
+- name: start_vm
+  when: vm_restore.stdout is not defined and ( vm_status.status is not defined or vm_status.status != "running" )
+  virt:
+    command: start
+    name: "{{ inventory_hostname }}"
+    uri: "{{ libvirt_uri }}"
+
+- name: Wait to raise vms
+  shell: virsh list |grep "{{ inventory_hostname }}"|grep running
+  register: test
+  retries: 25
+  delay: 10
+  until: test.stdout != ""
+
+...

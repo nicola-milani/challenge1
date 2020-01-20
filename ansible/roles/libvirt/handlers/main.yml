@@ -1,0 +1,7 @@
+---
+- name: clean box
+  file:
+    path: /var/lib/libvirt/images/box*.img
+    state: absent
+
+...
