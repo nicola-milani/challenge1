@@ -3,14 +3,18 @@ all:
     vms:
       hosts:
         vm-node1:
+          hostname: vm-node1
           memory: 1024
           vcpus: 1
           vm_ip: "192.168.8.2"
+          ansible_host: "192.168.8.2"
           linux_flavor: "centos"
         vm-node2:
+          hostname: vm-node2
           memory: 1024
           vcpus: 1
           vm_ip: "192.168.8.3"
+          ansible_host: "192.168.8.3"
           linux_flavor: "centos"
 
       vars:
