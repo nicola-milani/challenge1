@@ -6,18 +6,18 @@
     state: present
   run_once: true
 
-- name: Update repositories cache and install libvirt
-  apt:
-    name: "{{ packages }}"
-    update_cache: yes
-    force_apt_get: True
-  vars:
-    packages:
-    - libvirt-daemon-system
-    - python-libvirt
-    - python-lxml
-  when: ansible_os_family == "Debian"
-  run_once: true
+# - name: Update repositories cache and install libvirt
+#   apt:
+#     name: "{{ packages }}"
+#     update_cache: yes
+#     force_apt_get: True
+#   vars:
+#     packages:
+#     - libvirt-daemon-system
+#     - python-libvirt
+#     - python-lxml
+#   when: ansible_os_family == "Debian"
+#   run_once: true
 
 - name: Update repositories cache and install libvirt
   yum:
@@ -28,7 +28,7 @@
     - libvirt-daemon-kvm
     - python-lxml
   when: ansible_os_family == "RedHat"
-  #run_once: true
+  run_once: true
 
 - name: enable and start libvirtd service
   systemd:

@@ -27,10 +27,10 @@
 
   - name: Include Container Engine
     include_role:
-      name: "{{container_engine}}"
-      tasks_from: addons.yml
-    vars:
-      ansible_host: "{{ vm_ip }}"
-    run_once: true
-    when: addons is defined and master_name is defined and master_name.stdout == inventory_hostname and container_engine is defined
+      name: docker
+      tasks_from: main.yml
+    # vars:
+    #   ansible_host: "{{ vm_ip }}"
+    # run_once: true
+    # when: addons is defined and master_name is defined and master_name.stdout == inventory_hostname and container_engine is defined
 ...

@@ -1,45 +1,23 @@
 ---
-# - fail:
-#     msg: "Oracle Linux is not supported"
-#   when: ansible_distribution == "OracleLinux"
-
-# - name: Update repositories cache and install dirmngr and curl packages
-#   apt:
-#     name: "{{ packages }}"
-#     update_cache: yes
-#     force_apt_get: True
-#   vars:
-#     packages:
-#     - ebtables
-#     - ethtool 
-#     - software-properties-common
-#     - dirmngr
-#     - curl
-#     - socat
-#     - libseccomp2
-#   when: ansible_os_family == "Debian"
-
-# - name: Update repositories cache and install python3-pip
-#   apt:
-#     name: "python3-pip"
-#     update_cache: yes
-#     force_apt_get: True
-#   when: ansible_os_family == "Debian"
-
 - name: Install last Docker version
   shell: curl -sSL https://get.docker.com/ | sh
   args:
     warn: no
 
-# - name: Install Docker Compose from pip
-#   shell: "{{ item }}"
-#   with_items:
-#     - 'pip3 install docker-compose'
-#   when: ansible_os_family == "Debian"
+- name: Install last docker-compose
+  shell: |
+    curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" \
+        -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose 
 
-- name: Update repositories cache and install docker compose
-  yum:
-    name: "docker-compose"
-    state: latest
-  when: ansible_os_family == "RedHat"
+    chmod +x /usr/local/bin/docker-compose
+    ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  args:
+    executable: /usr/bin/sh
+    warn: no
+
+- name: enable and start docker daemon
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
 ...

@@ -34,7 +34,7 @@
     regexp: '#Added by Ansible os role'
   vars:
     ansible_host: "{{ vm_ip }}"
-    
+
 - name: Set authorized key for user ubuntu copying it from current user
   authorized_key:
     user: vagrant
@@ -115,6 +115,5 @@
   include_role:
     name: storage
     tasks_from: "{{ storage }}.nodes"
-
 
 ...
