@@ -50,30 +50,6 @@
   vars:
     ansible_host: "{{ vm_ip }}"
 
-# - name: install requirements for apt
-#   apt:
-#     name: "{{ packages }}"
-#     update_cache: yes
-#     force_apt_get: True
-#   vars:
-#     packages:
-#     - python-apt
-#   when: ansible_os_family == "Debian"
-#   run_once: true
-
-# - name: Update repositories cache and full upgrade
-#   yum:
-#     upgrade: full
-#     force_apt_get: True
-#   when: ansible_os_family == "Debian"
-#   run_once: true
-  
-# - name: Disable unattended-upgrades
-#   shell: "dpkg -P unattended-upgrades"
-#   when: ansible_os_family == "Debian"
-#   vars:
-#     ansible_host: "{{ vm_ip }}"
-
 - name: Update repositories cache and install libvirt
   yum:
     name: "{{ packages }}"
@@ -85,8 +61,18 @@
     - python-lxml
     - psutils
     - psmisc
-    - tmux
-  
+    - gdisk
+    - cloud-utils-growpart
+
+- name: Apply resize fs and notify resize to kernel
+  shell: 
+    cmd: |
+      growpart /dev/vda 1
+      xfs_growfs /
+  args:
+    executable: /bin/bash
+    warn: no
+
 - name: Add repository
   yum_repository:
     name: epel

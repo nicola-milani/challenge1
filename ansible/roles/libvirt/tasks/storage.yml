@@ -1,0 +1,90 @@
+---
+
+- name: Check available space in megabyte and if need to increase
+  shell: 
+    cmd: |
+      cat > /root/test <<EOF
+      #!/bin/bash
+      rm -rf /tmp/flag_increase
+      AVAILABLE=`df -m /var | awk '{print $4}' | tail -1`
+      [ \$AVAILABLE -lt {{min_available}} ] && echo \${AVAILABLE} > /tmp/flag_increase
+      EOF
+      chmod +x /root/test
+  args:
+    executable: /bin/bash
+    warn: no
+
+- name: Check need to apply increase
+  stat:
+      path: "/tmp/flag_increase"
+  register: do_resize
+
+- name: Resize storage 
+  shell: 
+    cmd: |
+        SIZE=`virsh vol-info {{inventory_hostname }}.qcow2 default | grep Capacity | awk '{print $2}' | awk -F "," '{print \$1}'` && \
+        NEWSIZE=$(( $SIZE + {{min_increase}} )) && \
+        virsh blockresize --domain {{inventory_hostname }} --path {{images_path }}/{{inventory_hostname }}.qcow2 ${NEWSIZE}G
+  args:
+      warn: no
+  when: do_resize.stat.exists == False
+  connection: local
+  delegate_to: localhost
+
+
+
+  # - name: check if data storage already exist
+#   stat:
+#       path: "{{images_path }}/{{inventory_hostname }}-disk2.qcow2"
+#   register: disk_exist
+#   connection: local
+#   delegate_to: localhost
+
+# - name: Create new storage disk for docker data
+#   shell: |
+#     virsh vol-create-as default {{inventory_hostname }}-disk2.qcow2 41G 
+#   args:
+#       warn: no
+#   when: disk_exist.stat.exists == False
+#   connection: local
+#   delegate_to: localhost
+
+# - name: Fix permissions
+#   shell: |
+#        chown libvirt-qemu:kvm {{images_path }}/{{inventory_hostname }}-disk2.qcow2
+#   args:
+#       warn: no
+#   when: disk_exist.stat.exists == True
+#   connection: local
+#   delegate_to: localhost
+
+# - name: Check if disk is already connect
+#   stat: 
+#       path: "/dev/vdb"
+#   register: disk_connect
+
+# - name: Connect disk to vm
+#   shell: |
+#        virsh attach-disk {{inventory_hostname }} --target vdb {{images_path }}/{{inventory_hostname }}-disk2.qcow2 --persistent
+#   args:
+#       warn: no
+#   when: disk_connect.stat.exists == False
+#   connection: local
+#   delegate_to: localhost
+
+# - name: Check if disk need to be formatted
+#   stat:
+#       path: "/dev/vdb1"
+#   register: part_exists
+
+# - name: Create partition, format and set etc/fstab if disk 2 need
+#   shell: |
+#       sgdisk -n1:0:0 /dev/vdb && \
+#       mkfs.ext4 "/dev/vdb1" && \
+#       echo "/dev/vdb1 /mnt ext4 defaults 0 0" >> /etc/fstab
+#   when: part_exists.stat.exists == False
+
+
+
+...
+

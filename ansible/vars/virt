@@ -3,3 +3,9 @@ libvirt_uri: "qemu:///system"
 images_path: /var/lib/libvirt/images
 libvirt_vm_engine: "kvm"
 netmask: "255.255.255.0"
+
+#minim available storage on root on creation
+min_available: 40960
+
+#step to increase storage
+min_increase: 5
