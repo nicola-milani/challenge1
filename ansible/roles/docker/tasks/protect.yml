@@ -1,0 +1,44 @@
+---
+- name: Generate certificate for secure connection
+  shell: |
+    mkdir -p /etc/docker/{{ domain.split('.')[0] }}
+    cd /etc/docker/{{ domain.split('.')[0] }}
+    openssl genrsa -aes256 -passout pass:{{pass}} -out ca-key.pem 4096
+    openssl req -new -passin "pass:{{pass}}" -subj "/CN={{inventory_hostname}}"  -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem
+    openssl genrsa -out server-key.pem 4096
+    openssl req -passin pass:{{pass}} -subj "/CN={{inventory_hostname}}" -sha256 -new -key server-key.pem -out server.csr
+    echo subjectAltName = DNS:{{inventory_hostname}},IP:{{vm_ip}},IP:127.0.0.1 > extfile.cnf
+    echo extendedKeyUsage = serverAuth >> extfile.cnf
+    openssl x509 -req -passin "pass:{{pass}}" -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -extfile extfile.cnf
+    openssl genrsa -out key.pem 4096
+    echo extendedKeyUsage = clientAuth > extfile-client.cnf
+
+  args:
+    executable: /usr/bin/sh
+    warn: no
+
+- name: Generate client certificate for secure connection
+  shell: |
+    cd /etc/docker/{{ domain.split('.')[0] }}
+    openssl req -subj '/CN={{item}}"' -new -key key.pem -out {{item}}.csr
+  loop: "{{clients_name}}"
+
+- name: Make key suitable
+  shell: |
+    cd /etc/docker/{{ domain.split('.')[0] }}
+    openssl x509 -req -passin pass:{{pass}} -days 365 -sha256 -in {{item}}.csr -CA ca.pem -CAkey ca-key.pem \
+        -CAcreateserial -out cert.pem -extfile extfile-client.cnf
+    rm -fr client.csr server.csr extfile.cnf extfile-client.cnf
+    chmod  0400 ca-key.pem key.pem server-key.pem
+    chmod  0444 ca.pem server-cert.pem cert.pem
+  loop: "{{clients_name}}"
+
+- name: Protect docker daemon
+  shell: |
+    sed -i '/ExecStart/c\ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/etc/docker/{{ domain.split('.')[0] }}/ca.pem --tlscert=/etc/docker/{{ domain.split('.')[0] }}/server-cert.pem --tlskey=/etc/docker/{{ domain.split('.')[0] }}/server-key.pem -H fd:// -H tcp://0.0.0.0:2376' /lib/systemd/system/docker.service 
+    systemctl daemon-reload 
+    systemctl restart docker 
+  args:
+    executable: /usr/bin/sh
+    warn: no
+...

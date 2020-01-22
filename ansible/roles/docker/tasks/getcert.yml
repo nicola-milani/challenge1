@@ -1,0 +1,21 @@
+---
+- name: Create storage cert folder
+  file:
+    path: /{{ storage_key_path }}
+    state: directory
+
+- name: Copy cert from node to local folder
+  fetch:
+    src: /etc/docker/{{ domain.split('.')[0] }}/cert.pem
+    dest: /{{storage_key_path}}
+
+- name: Copy key from node to local folder
+  fetch:
+    src: /etc/docker/{{ domain.split('.')[0] }}/key.pem
+    dest: /{{storage_key_path}}
+
+- name: Copy ca from node to local folder
+  fetch:
+    src: /etc/docker/{{ domain.split('.')[0] }}/ca.pem
+    dest: /{{storage_key_path}}
+...
