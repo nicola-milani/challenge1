@@ -10,7 +10,7 @@
         -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose 
 
     chmod +x /usr/local/bin/docker-compose
-    ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
   args:
     executable: /usr/bin/sh
     warn: no
@@ -23,10 +23,10 @@
 
 - name: Enable socket tcp
   shell: |
-    cp /lib/systemd/system/docker.service /root/docker.service.backup \
-    sed -i 's/--containerd=\/run\/containerd\/containerd.sock/-H tcp:\/\/0.0.0.0:2375/g' /lib/systemd/system/docker.service \
-    systemctl daemon-reload
-    systemctl restart docker
+    cp /lib/systemd/system/docker.service /root/docker.service.backup 
+    sed -i 's/--containerd=\/run\/containerd\/containerd.sock/-H tcp:\/\/0.0.0.0:2375/g' /lib/systemd/system/docker.service 
+    systemctl daemon-reload 
+    systemctl restart docker 
   args:
     executable: /usr/bin/sh
     warn: no
