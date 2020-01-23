@@ -1,9 +1,0 @@
----
-#- name: Configure VMs Storage
-#  include: "{{ storage }}.nodes.yml"
-
-- name: Install storage_controller
-  when: storage is defined and master_name is defined and master_name.stdout == inventory_hostname
-  run_once: true
-  include: "{{ storage }}.yml"
-...

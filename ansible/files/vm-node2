@@ -3,7 +3,7 @@
         "192.168.8.3"
     ], 
     "ansible_all_ipv6_addresses": [
-        "fe80::5054:ff:fe79:93dd"
+        "fe80::5054:ff:feb4:54a8"
     ], 
     "ansible_apparmor": {
         "status": "disabled"
@@ -26,16 +26,16 @@
     "ansible_date_time": {
         "date": "2020-01-23", 
         "day": "23", 
-        "epoch": "1579741836", 
+        "epoch": "1579744780", 
         "hour": "01", 
-        "iso8601": "2020-01-23T01:10:36Z", 
-        "iso8601_basic": "20200123T011036257558", 
-        "iso8601_basic_short": "20200123T011036", 
-        "iso8601_micro": "2020-01-23T01:10:36.257762Z", 
-        "minute": "10", 
+        "iso8601": "2020-01-23T01:59:40Z", 
+        "iso8601_basic": "20200123T015940305890", 
+        "iso8601_basic_short": "20200123T015940", 
+        "iso8601_micro": "2020-01-23T01:59:40.306079Z", 
+        "minute": "59", 
         "month": "01", 
-        "second": "36", 
-        "time": "01:10:36", 
+        "second": "40", 
+        "time": "01:59:40", 
         "tz": "UTC", 
         "tz_offset": "+0000", 
         "weekday": "Thursday", 
@@ -49,7 +49,7 @@
         "broadcast": "192.168.8.255", 
         "gateway": "192.168.8.1", 
         "interface": "eth0", 
-        "macaddress": "52:54:00:79:93:dd", 
+        "macaddress": "52:54:00:b4:54:a8", 
         "mtu": 1500, 
         "netmask": "255.255.255.0", 
         "network": "192.168.8.0", 
@@ -215,7 +215,7 @@
         "PWD": "/home/vagrant", 
         "SHELL": "/bin/bash", 
         "SHLVL": "1", 
-        "SUDO_COMMAND": "/bin/sh -c echo BECOME-SUCCESS-ykmhuowwoqstdlzefwbcbzdxfxegpbcz ; /usr/bin/python /home/vagrant/.ansible/tmp/ansible-tmp-1579741836.38-200350638712808/AnsiballZ_setup.py", 
+        "SUDO_COMMAND": "/bin/sh -c echo BECOME-SUCCESS-mfjcjccmlghzeypiviqivhlntrlvydgn ; /usr/bin/python /home/vagrant/.ansible/tmp/ansible-tmp-1579744778.32-189144365337651/AnsiballZ_setup.py", 
         "SUDO_GID": "1000", 
         "SUDO_UID": "1000", 
         "SUDO_USER": "vagrant", 
@@ -290,12 +290,12 @@
         }, 
         "ipv6": [
             {
-                "address": "fe80::5054:ff:fe79:93dd", 
+                "address": "fe80::5054:ff:feb4:54a8", 
                 "prefix": "64", 
                 "scope": "link"
             }
         ], 
-        "macaddress": "52:54:00:79:93:dd", 
+        "macaddress": "52:54:00:b4:54:a8", 
         "module": "virtio_net", 
         "mtu": 1500, 
         "pciid": "virtio0", 
@@ -435,17 +435,17 @@
         "type": "bridge"
     }, 
     "ansible_machine": "x86_64", 
-    "ansible_machine_id": "1c3782185e5b4f299c0c8d9be9bd6afa", 
-    "ansible_memfree_mb": 725, 
+    "ansible_machine_id": "5b6b0c1c0afb46cf8af9790ebccdf88e", 
+    "ansible_memfree_mb": 729, 
     "ansible_memory_mb": {
         "nocache": {
-            "free": 823, 
-            "used": 120
+            "free": 825, 
+            "used": 118
         }, 
         "real": {
-            "free": 725, 
+            "free": 729, 
             "total": 943, 
-            "used": 218
+            "used": 214
         }, 
         "swap": {
             "cached": 0, 
@@ -457,18 +457,18 @@
     "ansible_memtotal_mb": 943, 
     "ansible_mounts": [
         {
-            "block_available": 9713091, 
+            "block_available": 9713111, 
             "block_size": 4096, 
             "block_total": 10480385, 
-            "block_used": 767294, 
+            "block_used": 767274, 
             "device": "/dev/vda1", 
             "fstype": "xfs", 
-            "inode_available": 20943548, 
+            "inode_available": 20943573, 
             "inode_total": 20971008, 
-            "inode_used": 27460, 
+            "inode_used": 27435, 
             "mount": "/", 
             "options": "rw,seclabel,relatime,attr2,inode64,noquota", 
-            "size_available": 39784820736, 
+            "size_available": 39784902656, 
             "size_total": 42927656960, 
             "uuid": "3c8e36bd-8118-440d-9ec7-8aaf5959e6c9"
         }
@@ -529,7 +529,7 @@
     "ansible_processor_vcpus": 1, 
     "ansible_product_name": "Standard PC (i440FX + PIIX, 1996)", 
     "ansible_product_serial": "NA", 
-    "ansible_product_uuid": "1C378218-5E5B-4F29-9C0C-8D9BE9BD6AFA", 
+    "ansible_product_uuid": "5B6B0C1C-0AFB-46CF-8AF9-790EBCCDF88E", 
     "ansible_product_version": "pc-i440fx-bionic", 
     "ansible_python": {
         "executable": "/usr/bin/python", 
@@ -562,9 +562,9 @@
     }, 
     "ansible_selinux_python_present": true, 
     "ansible_service_mgr": "systemd", 
-    "ansible_ssh_host_key_ecdsa_public": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLJPJUkk4Jaie/uN+UJQ8qi2xHXSt6YMbJk1riPDNF6AVaR+sQn2ApDAM9ikEvxHzit8TyRKKnDMBNDQJIF4q+g=", 
-    "ansible_ssh_host_key_ed25519_public": "AAAAC3NzaC1lZDI1NTE5AAAAIH8A96CYRqBqtiuJFP8slyh8FflDyDZknCPAcUy+GpY/", 
-    "ansible_ssh_host_key_rsa_public": "AAAAB3NzaC1yc2EAAAADAQABAAABAQDLf4q7lEtAXrQmgt6+uZ/XfN26PflYq+1ZB1SIR6O/hwXCnBm+2dKRPSsBiy53gAJX1B7MQbHL92Du/xRUB9CeYam02MxHE0V+EDt1/P/CcTGU23vlCAFACcQ6g/MscAKYSzm7axNSjV8pPl5w3O0e+Q0rqDa4lsgB70m6Vm/eUnswcn6niCawj3jgqrAcqjaBghS7R6SuGQvzNYzyFFVQSByTRyswq0AhkTTQtlY1sYi5//YQxBe6xUk7TxTA5bF25+gZVrBtNgKCxDZpV7H+KCylEKu4DKnnmMYzdKDLrtNXmbNt1ORxVaWrSgNYJfNCiVjvuvLGvJTEfkVqVDr5", 
+    "ansible_ssh_host_key_ecdsa_public": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBE4P5OUFjCYbaJH2bfc5Llp5wqEYQx9Fo95aOtDMsVbit2iyX92DsLXTMENacGqersEXwM996ppfLp1csA2Bfww=", 
+    "ansible_ssh_host_key_ed25519_public": "AAAAC3NzaC1lZDI1NTE5AAAAIFZD7SE6VP8H1RfXvevJJJSuVkkVDOgQOWRUhn2dJ+Cj", 
+    "ansible_ssh_host_key_rsa_public": "AAAAB3NzaC1yc2EAAAADAQABAAABAQDY1fTPy6g/RJERaF6kBDcVTH8rVj1bACSenfkVDiyybUI76PYV1yerUmSoWufwICZQ28a2EM+1jUpLZmoLuqRo6M9fgng1gTHU2YburB2WhM9EPjE1J+bAp6u1ZwaMH1GAHLwuKu97937nDO61vywYPVW1s79mrx12x9fZR3TLj7C9hn+pMY8phZ+bi0fYskWZVPo8cqpZ4pQeVGrmY2mrcPw8gyZ9nO3DgSOhAg8soevhHYkj5tHNEhJrepdK39cbGg1zUlrGny2/jkdAPWtNdccse2vcwz7gm9Y1EcNROVw2bX0fX3ZlNlvAE2yrApJcnpcUmnDzGxtU5zqeV81x", 
     "ansible_swapfree_mb": 2047, 
     "ansible_swaptotal_mb": 2047, 
     "ansible_system": "Linux", 
@@ -609,7 +609,7 @@
     ], 
     "ansible_system_capabilities_enforced": "True", 
     "ansible_system_vendor": "QEMU", 
-    "ansible_uptime_seconds": 13, 
+    "ansible_uptime_seconds": 23, 
     "ansible_user_dir": "/root", 
     "ansible_user_gecos": "root", 
     "ansible_user_gid": 0, 
@@ -618,22 +618,6 @@
     "ansible_user_uid": 0, 
     "ansible_userspace_architecture": "x86_64", 
     "ansible_userspace_bits": "64", 
-    "ansible_veth09bbfad": {
-        "active": true, 
-        "device": "veth09bbfad", 
-        "ipv6": [
-            {
-                "address": "fe80::b8dc:50ff:fe96:86fb", 
-                "prefix": "64", 
-                "scope": "link"
-            }
-        ], 
-        "macaddress": "ba:dc:50:96:86:fb", 
-        "mtu": 1500, 
-        "promisc": true, 
-        "speed": 10000, 
-        "type": "ether"
-    }, 
     "ansible_veth432ab26": {
         "active": true, 
         "device": "veth432ab26", 
@@ -645,22 +629,6 @@
             }
         ], 
         "macaddress": "6a:55:2f:94:b5:f7", 
-        "mtu": 1500, 
-        "promisc": true, 
-        "speed": 10000, 
-        "type": "ether"
-    }, 
-    "ansible_vetha3691b1": {
-        "active": true, 
-        "device": "vetha3691b1", 
-        "ipv6": [
-            {
-                "address": "fe80::681b:cbff:fe2d:f0f9", 
-                "prefix": "64", 
-                "scope": "link"
-            }
-        ], 
-        "macaddress": "6a:1b:cb:2d:f0:f9", 
         "mtu": 1500, 
         "promisc": true, 
         "speed": 10000, 
@@ -722,38 +690,6 @@
     }, 
     "ansible_virtualization_role": "guest", 
     "ansible_virtualization_type": "kvm", 
-    "ansible_vnet0": {
-        "active": true, 
-        "device": "vnet0", 
-        "ipv6": [
-            {
-                "address": "fe80::fc54:ff:fe08:586b", 
-                "prefix": "64", 
-                "scope": "link"
-            }
-        ], 
-        "macaddress": "fe:54:00:08:58:6b", 
-        "mtu": 1500, 
-        "promisc": true, 
-        "speed": 10, 
-        "type": "ether"
-    }, 
-    "ansible_vnet1": {
-        "active": true, 
-        "device": "vnet1", 
-        "ipv6": [
-            {
-                "address": "fe80::fc54:ff:fe18:9cc", 
-                "prefix": "64", 
-                "scope": "link"
-            }
-        ], 
-        "macaddress": "fe:54:00:18:09:cc", 
-        "mtu": 1500, 
-        "promisc": true, 
-        "speed": 10, 
-        "type": "ether"
-    }, 
     "ansible_wlp2s0": {
         "active": false, 
         "device": "wlp2s0", 
