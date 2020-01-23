@@ -23,7 +23,7 @@ after this setup you can use remote docker daemon
 you can use http like this
 ```
 curl -k -s -XGET https://192.168.8.2:2376/v1.24/containers/json?all=1 --cert /root/docker-cluster/ssl/vm-node1/etc/docker/my-clusters/cert.pem --key /root/docker-cluster/ssl/vm-node1/etc/docker/my-clusters/key.pem --cacert /root/docker-cluster/ssl/vm-node1/etc/docker/my-clusters/ca.pem | jq
-``
+```
 ![alt text](https://github.com/nicola-milani/challenge1/blob/master/img/curl.png)
 
 
