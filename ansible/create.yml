@@ -53,10 +53,12 @@
     include_role:
       name: docker
       tasks_from: getcert.yml
+      
   - name: Start docker swarm
     include_role:
       name: docker
       tasks_from: init_swarm.yml
+
   - name: Add manager/worker to swarm
     include_role:
       name: docker

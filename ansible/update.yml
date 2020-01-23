@@ -29,6 +29,10 @@
     include_role:
       name: docker
       tasks_from: getcert.yml
+  # - name: swarm
+  #   include_role:
+  #     name: docker
+  #     tasks_from: init_swarm.yml
     # vars:
     #   ansible_host: "{{ vm_ip }}"
     # run_once: true
