@@ -1,0 +1,14 @@
+---
+- name: install and start nginx and curl
+  hosts: dev
+  
+  tasks:
+  - name: nginx package is present
+    apt:
+      name: nginx
+      update_cache: yes
+      state: present
+  - name: curl package is present
+    apt:
+      name: curl
+      state: present

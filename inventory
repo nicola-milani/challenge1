@@ -1,0 +1,5 @@
+[dev]
+localhost              ansible_connection=local
+
+[prod]
+server.example.com     ansible_connection=ssh  ansible_user=ubuntu
